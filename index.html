@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="LeadFlow Automation - a Zapier webhook and workflow automation portfolio project."
+  />
+  <title>LeadFlow Automation</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="LeadFlow home">
+      <span class="brand-mark">LF</span>
+      <span>
+        <strong>LeadFlow</strong>
+        <small>Automation Portfolio</small>
+      </span>
+    </a>
+
+    <div class="topbar-actions">
+      <span id="modeBadge" class="status-badge demo">Demo Mode</span>
+      <button id="settingsButton" class="secondary-button" type="button">Automation Settings</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Web Development + Zapier Automation</p>
+        <h1>Turn a website lead into an automated business workflow.</h1>
+        <p class="hero-copy">
+          LeadFlow demonstrates a complete intake pipeline: validate a lead, score its priority,
+          send structured data to Zapier, and trigger downstream actions such as CRM storage,
+          email follow-up, team notifications, and optional AI enrichment.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#lead-form">Run the demo</a>
+          <a class="text-link" href="#workflow">View workflow</a>
+        </div>
+      </div>
+
+      <div class="hero-card" aria-label="Automation overview">
+        <div class="hero-card-header">
+          <span>Automation status</span>
+          <span class="live-dot" aria-hidden="true"></span>
+        </div>
+        <div class="metric-grid">
+          <div>
+            <strong id="leadsMetric">0</strong>
+            <span>Leads processed</span>
+          </div>
+          <div>
+            <strong id="priorityMetric">0</strong>
+            <span>High priority</span>
+          </div>
+          <div>
+            <strong id="runsMetric">0</strong>
+            <span>Automation runs</span>
+          </div>
+        </div>
+        <p id="heroStatus" class="hero-status">Ready for a demo submission.</p>
+      </div>
+    </section>
+
+    <section id="workflow" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Workflow</p>
+        <h2>One submission, multiple automated actions</h2>
+      </div>
+
+      <div class="workflow-grid">
+        <article class="workflow-step">
+          <span>01</span>
+          <h3>Capture</h3>
+          <p>A responsive form collects structured prospect information.</p>
+        </article>
+        <article class="workflow-step">
+          <span>02</span>
+          <h3>Validate & Score</h3>
+          <p>JavaScript validates required fields and calculates lead priority.</p>
+        </article>
+        <article class="workflow-step">
+          <span>03</span>
+          <h3>Send to Zapier</h3>
+          <p>The browser posts the lead to a Webhooks by Zapier Catch Hook.</p>
+        </article>
+        <article class="workflow-step">
+          <span>04</span>
+          <h3>Automate</h3>
+          <p>Zapier can store, route, notify, email, and enrich the lead.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="workspace section">
+      <div class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Interactive demo</p>
+            <h2>New lead</h2>
+          </div>
+          <span class="panel-label">Webhook-ready</span>
+        </div>
+
+        <form id="lead-form" novalidate>
+          <div class="field-grid">
+            <label>
+              Full name
+              <input id="name" name="name" type="text" placeholder="Jordan Lee" required />
+            </label>
+
+            <label>
+              Email
+              <input id="email" name="email" type="email" placeholder="jordan@example.com" required />
+            </label>
+
+            <label>
+              Company
+              <input id="company" name="company" type="text" placeholder="Northstar Studio" />
+            </label>
+
+            <label>
+              Service
+              <select id="service" name="service" required>
+                <option value="">Select a service</option>
+                <option>Web Development</option>
+                <option>Web Automation</option>
+                <option>API Integration</option>
+                <option>AI Workflow</option>
+                <option>Technical Support</option>
+              </select>
+            </label>
+
+            <label>
+              Estimated budget
+              <select id="budget" name="budget" required>
+                <option value="">Select a range</option>
+                <option value="under-1000">Under $1,000</option>
+                <option value="1000-2500">$1,000 - $2,500</option>
+                <option value="2500-5000">$2,500 - $5,000</option>
+                <option value="5000+">$5,000+</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Project request
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              placeholder="Tell us what you want to automate..."
+              required
+            ></textarea>
+          </label>
+
+          <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+
+          <button id="submitButton" class="primary-button full-width" type="submit">
+            Run automation
+          </button>
+        </form>
+      </div>
+
+      <aside class="panel activity-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Observability</p>
+            <h2>Activity log</h2>
+          </div>
+          <button id="clearLogButton" class="icon-button" type="button" aria-label="Clear activity log">
+            Clear
+          </button>
+        </div>
+
+        <ol id="activityLog" class="activity-log">
+          <li class="empty-log">No automation runs yet.</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="section capability-section">
+      <div class="section-heading">
+        <p class="eyebrow">Automation capabilities</p>
+        <h2>Designed for real business workflows</h2>
+      </div>
+
+      <div class="capability-grid">
+        <div class="capability-card">
+          <h3>Webhook integration</h3>
+          <p>Connect custom frontends to Zapier without coupling the UI to a specific CRM.</p>
+        </div>
+        <div class="capability-card">
+          <h3>Conditional routing</h3>
+          <p>Use lead priority to trigger different paths, notifications, or follow-up actions.</p>
+        </div>
+        <div class="capability-card">
+          <h3>Data normalization</h3>
+          <p>Prepare structured fields for spreadsheets, databases, CRMs, and reporting.</p>
+        </div>
+        <div class="capability-card">
+          <h3>AI-ready workflow</h3>
+          <p>Add an AI action in Zapier to summarize requests or prepare sales context.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="settingsDialog" class="settings-dialog">
+    <form method="dialog" class="settings-card">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Configuration</p>
+          <h2>Automation settings</h2>
+        </div>
+        <button class="icon-button" value="cancel" aria-label="Close settings">Close</button>
+      </div>
+
+      <label>
+        Mode
+        <select id="modeSelect">
+          <option value="demo">Demo Mode</option>
+          <option value="zapier">Zapier Webhook</option>
+        </select>
+      </label>
+
+      <label>
+        Zapier Catch Hook URL
+        <input
+          id="webhookInput"
+          type="url"
+          placeholder="https://hooks.zapier.com/hooks/catch/..."
+          autocomplete="off"
+        />
+      </label>
+
+      <p class="settings-note">
+        The URL is saved only in this browser using localStorage. Do not commit a private production
+        webhook URL to a public repository.
+      </p>
+
+      <menu>
+        <button class="secondary-button" value="cancel">Cancel</button>
+        <button id="saveSettingsButton" class="primary-button" value="default">Save settings</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <footer>
+    <p>LeadFlow Automation · Zapier portfolio project by Charles Luke Templonuevo</p>
+    <a href="https://github.com/Arondith/Zapier-Project">View repository</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
