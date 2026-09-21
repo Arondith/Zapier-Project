@@ -1,112 +1,191 @@
-# LeadFlow Automation
+# ReliefRelay — Disaster Response Automation
 
-A portfolio project that demonstrates practical web development and business-process automation with Zapier.
+**ReliefRelay** is a web + Zapier automation portfolio project that explores a real coordination problem: during disasters, assistance requests can arrive faster than teams can manually organize, encode, route, acknowledge, and track them.
 
-LeadFlow captures a prospect from a responsive web form, prepares structured lead data, and sends it to a Zapier webhook. The Zap can then route the lead into Google Sheets, email, Slack, CRM tools, or an AI enrichment step.
+The project turns an unstructured request into a traceable workflow:
 
-## Why this project exists
+**Community request → validation → transparent routing support → Zapier webhook → case log → responder notification → acknowledgement → human review**
 
-This project was built to demonstrate the kind of work expected from a Web Developer / Automation Specialist:
+> ReliefRelay is a portfolio prototype, not an emergency service. It is designed to demonstrate responsible automation architecture for NGOs, local governments, volunteer groups, and humanitarian teams.
 
-- Build a polished client-facing web interface
-- Send structured data to external services
-- Connect a website to Zapier through webhooks
-- Automate repetitive lead-handling tasks
-- Apply validation and priority scoring
-- Design workflows that can be extended with AI
-- Document the automation so another developer can maintain it
+## Why this is a stronger automation portfolio
 
-## Automation flow
+This is not just a contact form connected to Zapier. It demonstrates:
+
+- a real-world operational problem
+- structured humanitarian intake
+- explainable rule-based routing
+- offline-aware queuing for unstable connectivity
+- retry behavior when connectivity returns
+- Zapier webhook integration
+- multi-system workflow design
+- data minimization and privacy warnings
+- accessible responsive UI
+- human-in-the-loop safeguards
+- optional AI summarization without AI-only emergency decisions
+
+## The problem it addresses
+
+In a disaster response environment, information may arrive through calls, text messages, forms, social media, or volunteers. Teams can lose time retyping the same information into spreadsheets, forwarding screenshots, deciding who should receive a request, and sending manual acknowledgements.
+
+ReliefRelay demonstrates how automation can reduce that coordination overhead while keeping the actual response decision with people.
+
+## Architecture
 
 ~~~mermaid
 flowchart LR
-    A[Website Lead Form] --> B[JavaScript Validation]
-    B --> C[Priority Scoring]
-    C --> D[Zapier Catch Hook]
-    D --> E[Formatter / Cleanup]
-    E --> F[Google Sheets or CRM]
-    E --> G[Email Acknowledgement]
-    E --> H[Slack / Team Alert]
-    E --> I[Optional AI Summary]
+    A[Community assistance form] --> B[Client-side validation]
+    B --> C[Explainable routing rules]
+    C --> D{Online?}
+    D -- No --> E[Local retry queue]
+    E --> D
+    D -- Yes --> F[Zapier Catch Hook]
+    F --> G[Case log: Sheets / Airtable / CRM]
+    F --> H[Responder channel: Slack / Email / Teams]
+    F --> I[Acknowledgement]
+    F --> J[Optional AI summary]
+    G --> K[Human review and assignment]
+    H --> K
+    J --> K
 ~~~
 
-## Features
+## Routing model
 
-- Responsive HTML/CSS/JavaScript interface
-- Demo mode that works without a Zapier account
-- Live Zapier webhook mode
-- Lead priority scoring
-- Local activity log
-- Runtime webhook configuration saved in the browser
-- Sample JSON payload for testing
-- Detailed Zapier setup guide
-- No framework or build step required
+Routing is intentionally simple and explainable.
 
-## Quick start
+Examples:
 
-1. Clone the repository.
-2. Open index.html in a browser.
-3. Leave the project in Demo Mode to test the interface.
-4. To connect Zapier, create a Catch Hook in Zapier.
-5. Open Automation Settings in the app.
-6. Change the mode to Zapier Webhook and paste your Catch Hook URL.
-7. Submit a test lead and confirm that Zapier receives the payload.
+- **Critical**: immediate danger, trapped requester, rescue / evacuation request
+- **High**: unsafe location, time-sensitive medical or shelter need, or vulnerability context combined with essential needs
+- **Standard**: requests without a critical/high routing condition
 
-See docs/ZAPIER_SETUP.md for the full automation setup.
+The routing reason is included in the payload. No request is automatically denied or closed based on its tier.
 
-## Example payload
+## Offline-aware behavior
+
+When Zapier mode is enabled:
+
+1. If the browser is online, the request is sent to the configured Zapier webhook.
+2. If the browser is offline or the handoff fails, the request is stored in a local retry queue.
+3. When connectivity returns, ReliefRelay automatically attempts to sync queued requests.
+
+This is a portfolio implementation using browser localStorage. A production deployment should use encrypted local persistence and a secure backend.
+
+## Zapier workflow
+
+Recommended Zap:
+
+1. **Webhooks by Zapier — Catch Hook**
+2. **Formatter by Zapier** — normalize fields and timestamps
+3. **Google Sheets / Airtable / CRM** — create the case record
+4. **Paths / Filter** — branch by `routeTier` and `routeDestination`
+5. **Slack / Gmail / Microsoft Teams** — notify the relevant response team
+6. **Email / SMS provider** — send a safe acknowledgement
+7. **Optional AI step** — summarize the request for responders
+8. **Human review** — verify, assign, contact, and close the request
+
+See [docs/ZAPIER_SETUP.md](docs/ZAPIER_SETUP.md).
+
+## Key payload fields
 
 ~~~json
 {
-  "name": "Jordan Lee",
-  "email": "jordan@example.com",
-  "company": "Northstar Studio",
-  "service": "Web Automation",
-  "budget": "5000+",
-  "message": "We need to automate website leads and client follow-ups.",
-  "priority": "High",
-  "score": 85,
-  "source": "LeadFlow Portfolio",
-  "submittedAt": "2026-09-21T08:30:00.000Z"
+  "requestId": "16be4cce-...",
+  "fullName": "Maria Santos",
+  "contact": "0917-000-0000",
+  "location": "Riverside Community, Sample City",
+  "requestType": "shelter",
+  "peopleAffected": 5,
+  "urgency": "today",
+  "safetyStatus": "unsafe",
+  "vulnerabilities": ["child", "older-person"],
+  "details": "Sample scenario...",
+  "routeTier": "high",
+  "routeDestination": "Shelter and displacement support",
+  "routeReason": "current location marked unsafe; time-sensitive shelter need; additional vulnerability context provided",
+  "humanReviewRequired": true
 }
 ~~~
 
-## Suggested Zap
-
-Trigger: Webhooks by Zapier - Catch Hook
-
-Actions:
-1. Formatter by Zapier - normalize incoming fields
-2. Google Sheets - create lead row
-3. Filter or Paths - branch on lead priority
-4. Gmail or Email by Zapier - send acknowledgement
-5. Slack - notify the team for high-priority leads
-6. Optional AI step - summarize the request for the sales team
-
 ## Tech stack
 
-HTML, CSS, JavaScript, Zapier Webhooks, REST-style payloads, browser localStorage
+- HTML5
+- modern responsive CSS
+- vanilla JavaScript
+- Webhooks by Zapier
+- browser localStorage
+- service worker / offline shell
+- REST-style structured payloads
+
+No framework or build step is required.
+
+## Run locally
+
+Because service workers require HTTP/HTTPS, use a local web server instead of opening the file directly.
+
+Python:
+
+~~~bash
+python -m http.server 8000
+~~~
+
+Then visit:
+
+~~~text
+http://localhost:8000
+~~~
+
+The app works in **Demo Mode** without a Zapier account.
+
+## Connect a real Zap
+
+1. Create a Zap.
+2. Choose **Webhooks by Zapier**.
+3. Select **Catch Hook**.
+4. Copy the generated hook URL.
+5. Open ReliefRelay.
+6. Open **Automation Settings**.
+7. Change mode to **Zapier webhook**.
+8. Paste the hook URL.
+9. Submit the built-in sample scenario.
+10. Confirm that Zapier receives the payload.
+
+Do not commit the webhook URL to this repository.
+
+## Responsible automation principles
+
+ReliefRelay intentionally includes safeguards:
+
+- no automated denial of assistance
+- no AI-only emergency triage
+- visible routing reasons
+- explicit human review flag
+- no production secrets in source code
+- fictional/test data warning
+- minimal intake fields
+- production security limitations documented openly
+
+For a real deployment, the webhook handoff should move behind an authenticated backend with rate limiting, encrypted storage, audit logs, role-based access, secure secret management, and organization-approved response procedures.
 
 ## Portfolio talking point
 
-"I built a lead-intake automation that connects a custom web interface to Zapier through a webhook. The workflow validates and scores incoming leads, then Zapier can store the lead, notify a team, send follow-up communication, and optionally enrich the request with AI."
-
-## Security note
-
-Do not commit a private production webhook URL to this public repository. The demo stores a webhook URL only in the current browser using localStorage.
+> I built ReliefRelay to demonstrate how web development and Zapier automation can solve a coordination problem rather than just automate a business form. The frontend structures disaster-assistance requests, creates an explainable routing tier, handles temporary connectivity loss with a retry queue, and can hand the request to Zapier for logging, team notification, acknowledgement, and optional AI summarization. Human review remains mandatory.
 
 ## Project structure
 
-- index.html - portfolio interface
-- styles.css - responsive UI
-- app.js - form validation, scoring, demo/live automation logic
-- samples/lead.json - sample webhook payload
-- docs/ZAPIER_SETUP.md - step-by-step Zapier configuration
-- docs/INTERVIEW_NOTES.md - concise explanation for recruiters/interviews
+- `index.html` — responsive humanitarian intake and response console
+- `styles.css` — accessible interface and mobile layout
+- `app.js` — validation, routing, retry queue, metrics, Zapier handoff
+- `sw.js` — offline shell cache
+- `manifest.webmanifest` — installable web app metadata
+- `samples/request.json` — sample webhook payload
+- `docs/ZAPIER_SETUP.md` — Zapier setup guide
+- `docs/INTERVIEW_NOTES.md` — recruiter / interview explanation
+- `docs/IMPACT_AND_SAFETY.md` — scope, safeguards, and production limitations
 
 ## Author
 
-Charles Luke Templonuevo
+**Charles Luke Templonuevo**
 
 Portfolio: https://charles-luke-templonuevo.vercel.app/
 
