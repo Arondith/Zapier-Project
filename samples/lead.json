@@ -1,12 +1,21 @@
 {
-  "name": "Jordan Lee",
-  "email": "jordan@example.com",
-  "company": "Northstar Studio",
-  "service": "Web Automation",
-  "budget": "5000+",
-  "message": "We need to automate website leads, client follow-ups, and internal notifications.",
-  "priority": "High",
-  "score": 85,
-  "source": "LeadFlow Portfolio",
+  "requestId": "5becc2b7-ffb1-41ba-a405-7a8eec02ee4e",
+  "fullName": "Maria Santos",
+  "contact": "0917-000-0000",
+  "location": "Riverside Community, Sample City",
+  "requestType": "shelter",
+  "peopleAffected": 5,
+  "urgency": "today",
+  "safetyStatus": "unsafe",
+  "vulnerabilities": [
+    "child",
+    "older-person"
+  ],
+  "details": "Sample scenario: flooding damaged the house. The family moved to higher ground but needs temporary shelter, drinking water, and information about the nearest safe evacuation site.",
+  "routeTier": "high",
+  "routeDestination": "Shelter and displacement support",
+  "routeReason": "current location marked unsafe; time-sensitive shelter need; additional vulnerability context provided",
+  "source": "ReliefRelay Portfolio",
+  "humanReviewRequired": true,
   "submittedAt": "2026-09-21T08:30:00.000Z"
 }
