@@ -1,50 +1,103 @@
-# Interview Notes
+# Interview Notes — ReliefRelay
 
 ## 30-second explanation
 
-LeadFlow is a web-to-Zapier automation project. I built a responsive lead form in HTML, CSS, and JavaScript, added client-side validation and lead scoring, and designed the app to send structured data to a Zapier Catch Hook. Zapier can then store the lead, send notifications, trigger follow-up communication, and optionally add an AI summarization step.
+ReliefRelay is a disaster-assistance workflow prototype I built to demonstrate practical Zapier automation. Instead of automating a generic contact form, I focused on a coordination problem: response teams can receive many requests through different channels and spend time manually encoding, forwarding, and sorting them.
+
+The app validates a structured assistance request, creates an explainable routing tier, queues the request if connectivity is unavailable, and can send it to a Zapier Catch Hook for case logging, responder notification, acknowledgement, and optional AI summarization. Human review is always required.
 
 ## What I built directly
 
-- Responsive frontend
-- Form validation
-- Priority-scoring logic
-- Structured webhook payload
-- Zapier webhook integration mode
-- Demo mode for local testing
-- Activity log
-- Runtime webhook configuration with localStorage
-- Workflow documentation
+- responsive accessible frontend
+- humanitarian request intake
+- form validation
+- explainable routing rules
+- unique request IDs
+- structured webhook payload
+- Zapier webhook mode
+- demo simulation mode
+- local offline/retry queue
+- connection-state handling
+- saved activity log and metrics
+- service-worker app shell
+- detailed workflow and security documentation
 
-## What Zapier handles
+## What Zapier can handle
 
-- Receiving the webhook
-- Sending data to connected apps
-- Conditional routing with Filters or Paths
-- Email and team notifications
-- Optional AI enrichment
-- Additional CRM or spreadsheet actions
+- webhook intake
+- Formatter cleanup
+- Google Sheets / Airtable / CRM case creation
+- Paths or Filter routing
+- Slack / Teams / email alerts
+- requester acknowledgement
+- optional AI summary
+- downstream task creation
 
-## Why use Zapier instead of hard-coding every integration?
+## Why this is an automation project, not just a website
 
-Zapier reduces the amount of custom integration code needed for common business tools. The frontend only needs to produce a reliable structured payload, while the automation layer can be changed without rebuilding the user interface.
+The frontend is only the intake surface. The important engineering problem is moving one validated request reliably through multiple systems without retyping the data.
 
-## How would I make this production-ready?
+The project separates:
 
-- Move webhook submission behind a backend endpoint
-- Add rate limiting and bot protection
-- Store secrets server-side
-- Add server-side validation
-- Add idempotency or duplicate detection
-- Add monitoring and retry handling
-- Connect a real CRM
-- Add automated tests
-- Track workflow failures and alert an administrator
+1. data capture
+2. routing logic
+3. automation handoff
+4. downstream integrations
+5. human response
 
-## AI extension
+That means the destination tools can change without rebuilding the public form.
 
-A Zapier AI step can summarize the project request before notifying the sales or development team. I would keep the original user data alongside the AI-generated summary so the team can verify the model output.
+## Explain the routing
+
+The routing is intentionally rule-based and visible.
+
+Critical examples:
+- immediate danger
+- trapped requester
+- rescue / evacuation request
+
+High examples:
+- unsafe location
+- time-sensitive medical or shelter need
+- vulnerability context combined with essential needs
+
+The app records the reason in the payload. It never automatically denies a request.
+
+## Why not let AI determine emergency priority?
+
+Because emergency response has high consequences and incomplete information. AI can summarize or organize text, but a trained person should verify urgency and decide what action to take.
+
+That is why ReliefRelay includes `humanReviewRequired: true`.
+
+## Offline behavior
+
+If live Zapier mode is enabled but the browser has no connection, the app keeps the request in a local queue. When the browser comes back online, it attempts to send queued items.
+
+For a real deployment, I would replace localStorage with encrypted offline persistence and sync through a secure backend.
+
+## Production improvements
+
+- backend API proxy
+- authentication and role-based access
+- secure secret storage
+- encrypted database
+- idempotency keys
+- server-side validation
+- rate limiting
+- CAPTCHA or abuse prevention
+- retry/backoff strategy
+- centralized logs and monitoring
+- case status updates
+- audit trail
+- tests for routing logic
+- privacy/retention controls
+- localization and multilingual support
+- organization-approved emergency protocols
+
+## Strong interview statement
+
+"I use automation to remove repetitive coordination work, not human responsibility. ReliefRelay shows that approach: code structures and routes information, Zapier connects systems, and humans remain accountable for the actual response."
 
 ## Skills demonstrated
 
-Zapier, webhooks, HTML, CSS, JavaScript, validation, workflow automation, API-style integration, debugging, documentation, business-process thinking, and AI-ready automation design.
+Zapier, webhooks, HTML, CSS, JavaScript, offline-aware frontend design, workflow automation, structured data, routing logic, integration design, debugging, documentation, accessibility, privacy-aware engineering, and human-in-the-loop AI design.
