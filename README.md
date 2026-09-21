@@ -8,6 +8,10 @@ The project turns an unstructured request into a traceable workflow:
 
 > ReliefRelay is a portfolio prototype, not an emergency service. It is designed to demonstrate responsible automation architecture for NGOs, local governments, volunteer groups, and humanitarian teams.
 
+## Project Preview
+
+![ReliefRelay project preview](https://d2ol7oe51mr4n9.cloudfront.net/user_3JGUTZnbwjVtgPxRXiNMsjQVIk0/9867c920-911e-4276-aa70-7bba444d2788.png)
+
 ## Why this is a stronger automation portfolio
 
 This is not just a contact form connected to Zapier. It demonstrates:
