@@ -1,0 +1,9 @@
+{
+  "name": "ReliefRelay Disaster Response Automation",
+  "short_name": "ReliefRelay",
+  "description": "A humanitarian assistance intake and Zapier automation portfolio prototype.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f8",
+  "theme_color": "#0b1220"
+}
