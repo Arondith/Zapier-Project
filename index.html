@@ -5,22 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     name="description"
-    content="LeadFlow Automation - a Zapier webhook and workflow automation portfolio project."
+    content="ReliefRelay is a disaster-assistance intake and Zapier automation portfolio project for NGOs, LGUs, and community response teams."
   />
-  <title>LeadFlow Automation</title>
+  <meta name="theme-color" content="#0b1220" />
+  <title>ReliefRelay — Disaster Response Automation</title>
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#request-form">Skip to assistance request</a>
+
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="LeadFlow home">
-      <span class="brand-mark">LF</span>
+    <a class="brand" href="#top" aria-label="ReliefRelay home">
+      <span class="brand-mark" aria-hidden="true">RR</span>
       <span>
-        <strong>LeadFlow</strong>
-        <small>Automation Portfolio</small>
+        <strong>ReliefRelay</strong>
+        <small>Humanitarian Automation Prototype</small>
       </span>
     </a>
 
     <div class="topbar-actions">
+      <span id="networkBadge" class="status-badge neutral">Checking network</span>
       <span id="modeBadge" class="status-badge demo">Demo Mode</span>
       <button id="settingsButton" class="secondary-button" type="button">Automation Settings</button>
     </div>
@@ -28,69 +33,103 @@
 
   <main id="top">
     <section class="hero">
-      <div>
-        <p class="eyebrow">Web Development + Zapier Automation</p>
-        <h1>Turn a website lead into an automated business workflow.</h1>
+      <div class="hero-copy-wrap">
+        <p class="eyebrow">Web Development · Zapier · Humanitarian Coordination</p>
+        <h1>Turn a crisis request into a coordinated response workflow.</h1>
         <p class="hero-copy">
-          LeadFlow demonstrates a complete intake pipeline: validate a lead, score its priority,
-          send structured data to Zapier, and trigger downstream actions such as CRM storage,
-          email follow-up, team notifications, and optional AI enrichment.
+          ReliefRelay is a portfolio prototype for NGOs, local governments, and volunteer response teams.
+          It structures requests for food, water, shelter, medical support, rescue, and infrastructure assistance,
+          then routes them through Zapier for logging, notification, acknowledgement, and human review.
         </p>
+
         <div class="hero-actions">
-          <a class="primary-button" href="#lead-form">Run the demo</a>
-          <a class="text-link" href="#workflow">View workflow</a>
+          <a class="primary-button" href="#request-form">Run the response demo</a>
+          <button id="loadSampleButton" class="secondary-button" type="button">Load sample scenario</button>
+          <a class="text-link" href="#workflow">See the architecture</a>
+        </div>
+
+        <div class="safety-note" role="note">
+          <strong>Prototype, not an emergency service.</strong>
+          For immediate danger, contact the appropriate local emergency service. Automated routing here is decision support only; people remain responsible for response decisions.
         </div>
       </div>
 
-      <div class="hero-card" aria-label="Automation overview">
-        <div class="hero-card-header">
-          <span>Automation status</span>
-          <span class="live-dot" aria-hidden="true"></span>
+      <aside class="command-card" aria-label="ReliefRelay command summary">
+        <div class="command-card-header">
+          <div>
+            <span class="kicker">Response console</span>
+            <strong id="systemState">System ready</strong>
+          </div>
+          <span class="pulse-dot" aria-hidden="true"></span>
         </div>
+
         <div class="metric-grid">
           <div>
-            <strong id="leadsMetric">0</strong>
-            <span>Leads processed</span>
+            <strong id="requestsMetric">0</strong>
+            <span>Requests processed</span>
           </div>
           <div>
-            <strong id="priorityMetric">0</strong>
-            <span>High priority</span>
+            <strong id="urgentMetric">0</strong>
+            <span>Urgent routes</span>
           </div>
           <div>
-            <strong id="runsMetric">0</strong>
-            <span>Automation runs</span>
+            <strong id="queuedMetric">0</strong>
+            <span>Waiting to sync</span>
           </div>
         </div>
-        <p id="heroStatus" class="hero-status">Ready for a demo submission.</p>
+
+        <div class="command-strip">
+          <span>Human review</span>
+          <strong>Required</strong>
+        </div>
+        <p id="heroStatus" class="hero-status">Ready for a demonstration request.</p>
+      </aside>
+    </section>
+
+    <section class="problem-strip" aria-label="Problem statement">
+      <div>
+        <span class="eyebrow">The problem</span>
+        <h2>During disasters, information can be as scarce as supplies.</h2>
       </div>
+      <p>
+        Requests often arrive through calls, messages, forms, and social media. ReliefRelay shows how a lightweight
+        web interface and automation layer can standardize that information, reduce repetitive encoding, and move each
+        request toward the right human response team faster.
+      </p>
     </section>
 
     <section id="workflow" class="section">
-      <div class="section-heading">
-        <p class="eyebrow">Workflow</p>
-        <h2>One submission, multiple automated actions</h2>
+      <div class="section-heading split-heading">
+        <div>
+          <p class="eyebrow">Automation architecture</p>
+          <h2>One request, one traceable workflow</h2>
+        </div>
+        <p>
+          The frontend collects only operationally useful fields. JavaScript validates and assigns a transparent routing tier.
+          Zapier can then distribute the same structured record across the tools a response organization already uses.
+        </p>
       </div>
 
       <div class="workflow-grid">
         <article class="workflow-step">
           <span>01</span>
           <h3>Capture</h3>
-          <p>A responsive form collects structured prospect information.</p>
+          <p>Collect need type, safe contact method, area, people affected, urgency, and essential context.</p>
         </article>
         <article class="workflow-step">
           <span>02</span>
-          <h3>Validate & Score</h3>
-          <p>JavaScript validates required fields and calculates lead priority.</p>
+          <h3>Route transparently</h3>
+          <p>Rule-based routing uses explicit conditions and records why a request was marked urgent.</p>
         </article>
         <article class="workflow-step">
           <span>03</span>
-          <h3>Send to Zapier</h3>
-          <p>The browser posts the lead to a Webhooks by Zapier Catch Hook.</p>
+          <h3>Sync through Zapier</h3>
+          <p>Send a structured payload to Sheets, Airtable, a CRM, email, Slack, or another connected system.</p>
         </article>
         <article class="workflow-step">
           <span>04</span>
-          <h3>Automate</h3>
-          <p>Zapier can store, route, notify, email, and enrich the lead.</p>
+          <h3>Human response</h3>
+          <p>Responders review, verify, assign, contact, and close the request. Automation never replaces judgment.</p>
         </article>
       </div>
     </section>
@@ -99,112 +138,186 @@
       <div class="panel form-panel">
         <div class="panel-heading">
           <div>
-            <p class="eyebrow">Interactive demo</p>
-            <h2>New lead</h2>
+            <p class="eyebrow">Interactive prototype</p>
+            <h2>Assistance request</h2>
+            <p>Use fictional data when testing this public portfolio project.</p>
           </div>
-          <span class="panel-label">Webhook-ready</span>
+          <span class="panel-label">Offline-aware</span>
         </div>
 
-        <form id="lead-form" novalidate>
+        <form id="request-form" novalidate>
           <div class="field-grid">
             <label>
-              Full name
-              <input id="name" name="name" type="text" placeholder="Jordan Lee" required />
+              Requester name
+              <input id="fullName" name="fullName" type="text" autocomplete="name" placeholder="Maria Santos" required />
             </label>
 
             <label>
-              Email
-              <input id="email" name="email" type="email" placeholder="jordan@example.com" required />
+              Safe contact
+              <input id="contact" name="contact" type="text" placeholder="Phone or email" required />
             </label>
 
             <label>
-              Company
-              <input id="company" name="company" type="text" placeholder="Northstar Studio" />
+              Community / area
+              <input id="location" name="location" type="text" placeholder="Barangay / municipality / area" required />
             </label>
 
             <label>
-              Service
-              <select id="service" name="service" required>
-                <option value="">Select a service</option>
-                <option>Web Development</option>
-                <option>Web Automation</option>
-                <option>API Integration</option>
-                <option>AI Workflow</option>
-                <option>Technical Support</option>
+              Type of assistance
+              <select id="requestType" name="requestType" required>
+                <option value="">Choose a need</option>
+                <option value="rescue">Rescue / evacuation</option>
+                <option value="medical">Medical support</option>
+                <option value="water">Safe drinking water</option>
+                <option value="food">Food assistance</option>
+                <option value="shelter">Shelter / temporary housing</option>
+                <option value="protection">Protection / accessibility support</option>
+                <option value="infrastructure">Road / power / communications issue</option>
+                <option value="other">Other assistance</option>
               </select>
             </label>
 
             <label>
-              Estimated budget
-              <select id="budget" name="budget" required>
-                <option value="">Select a range</option>
-                <option value="under-1000">Under $1,000</option>
-                <option value="1000-2500">$1,000 - $2,500</option>
-                <option value="2500-5000">$2,500 - $5,000</option>
-                <option value="5000+">$5,000+</option>
+              People affected
+              <input id="peopleAffected" name="peopleAffected" type="number" min="1" max="10000" inputmode="numeric" value="1" required />
+            </label>
+
+            <label>
+              Urgency
+              <select id="urgency" name="urgency" required>
+                <option value="">Choose urgency</option>
+                <option value="immediate">Immediate danger / action needed now</option>
+                <option value="today">Needs attention today</option>
+                <option value="soon">Within 24–48 hours</option>
+                <option value="routine">Routine / non-urgent</option>
               </select>
             </label>
+
+            <label>
+              Current safety
+              <select id="safetyStatus" name="safetyStatus" required>
+                <option value="">Choose status</option>
+                <option value="trapped">Trapped / cannot safely leave</option>
+                <option value="unsafe">Current location is unsafe</option>
+                <option value="displaced">Displaced but in a temporary safe area</option>
+                <option value="safe">Currently safe</option>
+              </select>
+            </label>
+
+            <fieldset class="checkbox-group">
+              <legend>Additional vulnerability context</legend>
+              <label class="check-row"><input type="checkbox" name="vulnerability" value="child" /> Children</label>
+              <label class="check-row"><input type="checkbox" name="vulnerability" value="older-person" /> Older person</label>
+              <label class="check-row"><input type="checkbox" name="vulnerability" value="pregnancy" /> Pregnant person</label>
+              <label class="check-row"><input type="checkbox" name="vulnerability" value="disability" /> Person with disability</label>
+              <label class="check-row"><input type="checkbox" name="vulnerability" value="medical-dependency" /> Medical dependency</label>
+            </fieldset>
           </div>
 
           <label>
-            Project request
+            Situation details
             <textarea
-              id="message"
-              name="message"
+              id="details"
+              name="details"
               rows="5"
-              placeholder="Tell us what you want to automate..."
+              maxlength="1200"
+              placeholder="What happened, what is needed, and any access constraints responders should know?"
               required
             ></textarea>
+            <span class="field-help"><span id="characterCount">0</span>/1200 characters</span>
+          </label>
+
+          <label class="consent-row">
+            <input id="consent" name="consent" type="checkbox" required />
+            <span>I understand this is a portfolio prototype and I am using fictional/test information.</span>
           </label>
 
           <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
 
           <button id="submitButton" class="primary-button full-width" type="submit">
-            Run automation
+            Process assistance request
           </button>
         </form>
       </div>
 
-      <aside class="panel activity-panel">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Observability</p>
-            <h2>Activity log</h2>
+      <aside class="side-stack">
+        <section class="panel routing-panel" aria-labelledby="routingTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Transparent routing</p>
+              <h2 id="routingTitle">Routing preview</h2>
+            </div>
+            <span id="routeBadge" class="route-badge standard">Standard</span>
           </div>
-          <button id="clearLogButton" class="icon-button" type="button" aria-label="Clear activity log">
-            Clear
-          </button>
-        </div>
 
-        <ol id="activityLog" class="activity-log">
-          <li class="empty-log">No automation runs yet.</li>
-        </ol>
+          <dl class="route-details">
+            <div>
+              <dt>Destination</dt>
+              <dd id="routeDestination">General response desk</dd>
+            </div>
+            <div>
+              <dt>Why</dt>
+              <dd id="routeReason">Complete the form to preview routing.</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="panel activity-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Traceability</p>
+              <h2>Activity log</h2>
+            </div>
+            <button id="clearLogButton" class="icon-button" type="button">Clear</button>
+          </div>
+
+          <ol id="activityLog" class="activity-log">
+            <li class="empty-log">No workflow activity yet.</li>
+          </ol>
+        </section>
       </aside>
     </section>
 
-    <section class="section capability-section">
+    <section class="section impact-section">
       <div class="section-heading">
-        <p class="eyebrow">Automation capabilities</p>
-        <h2>Designed for real business workflows</h2>
+        <p class="eyebrow">Real-world value</p>
+        <h2>Designed around coordination problems, not just a demo form</h2>
       </div>
 
       <div class="capability-grid">
-        <div class="capability-card">
-          <h3>Webhook integration</h3>
-          <p>Connect custom frontends to Zapier without coupling the UI to a specific CRM.</p>
-        </div>
-        <div class="capability-card">
-          <h3>Conditional routing</h3>
-          <p>Use lead priority to trigger different paths, notifications, or follow-up actions.</p>
-        </div>
-        <div class="capability-card">
-          <h3>Data normalization</h3>
-          <p>Prepare structured fields for spreadsheets, databases, CRMs, and reporting.</p>
-        </div>
-        <div class="capability-card">
-          <h3>AI-ready workflow</h3>
-          <p>Add an AI action in Zapier to summarize requests or prepare sales context.</p>
-        </div>
+        <article class="capability-card">
+          <span class="capability-tag">Resilience</span>
+          <h3>Offline-aware queue</h3>
+          <p>If the browser loses connectivity while live mode is enabled, the request can wait locally and retry when the connection returns.</p>
+        </article>
+        <article class="capability-card">
+          <span class="capability-tag">Interoperability</span>
+          <h3>Works with existing tools</h3>
+          <p>Zapier can forward the same request to Sheets, Airtable, email, Slack, CRM platforms, or other systems without rebuilding the frontend.</p>
+        </article>
+        <article class="capability-card">
+          <span class="capability-tag">Accountability</span>
+          <h3>Explainable routing</h3>
+          <p>Each routing tier includes a recorded reason. The system avoids opaque automated decisions and keeps human review explicit.</p>
+        </article>
+        <article class="capability-card">
+          <span class="capability-tag">Privacy</span>
+          <h3>Data minimization</h3>
+          <p>The prototype asks for operationally useful information and warns against entering real personal data in a public demonstration.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section safeguards">
+      <div>
+        <p class="eyebrow">Responsible automation</p>
+        <h2>What the system should never decide alone</h2>
+      </div>
+      <div class="safeguard-list">
+        <p><strong>No automated denial.</strong> A low routing tier must never mean a person is refused assistance.</p>
+        <p><strong>No AI-only emergency triage.</strong> AI may summarize text, but trained humans verify urgency and action.</p>
+        <p><strong>No secret scoring.</strong> Routing rules are visible in the code and should be reviewed by the deploying organization.</p>
+        <p><strong>No public production secrets.</strong> Webhook URLs and credentials belong behind a secure backend in a real deployment.</p>
       </div>
     </section>
   </main>
@@ -220,10 +333,10 @@
       </div>
 
       <label>
-        Mode
+        Processing mode
         <select id="modeSelect">
-          <option value="demo">Demo Mode</option>
-          <option value="zapier">Zapier Webhook</option>
+          <option value="demo">Demo simulation</option>
+          <option value="zapier">Zapier webhook</option>
         </select>
       </label>
 
@@ -238,8 +351,7 @@
       </label>
 
       <p class="settings-note">
-        The URL is saved only in this browser using localStorage. Do not commit a private production
-        webhook URL to a public repository.
+        This prototype saves the URL only in this browser. A real deployment should send requests through a secured backend so the webhook is never exposed to clients.
       </p>
 
       <menu>
@@ -250,8 +362,11 @@
   </dialog>
 
   <footer>
-    <p>LeadFlow Automation · Zapier portfolio project by Charles Luke Templonuevo</p>
-    <a href="https://github.com/Arondith/Zapier-Project">View repository</a>
+    <div>
+      <strong>ReliefRelay</strong>
+      <p>A humanitarian automation portfolio project by Charles Luke Templonuevo.</p>
+    </div>
+    <a href="https://github.com/Arondith/Zapier-Project">View source on GitHub</a>
   </footer>
 
   <script src="app.js"></script>
