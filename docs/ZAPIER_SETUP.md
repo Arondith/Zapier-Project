@@ -1,145 +1,168 @@
-# Zapier Setup Guide
+# Zapier Setup — ReliefRelay
 
-This guide turns the LeadFlow frontend into a real automation.
+This guide connects the ReliefRelay humanitarian intake prototype to a real Zapier workflow.
 
-## 1. Create the trigger
+> Use fictional data while testing. This portfolio project is not an emergency service.
 
-In Zapier:
+## 1. Create the webhook trigger
 
 1. Create a new Zap.
-2. Choose Webhooks by Zapier.
-3. Select Catch Hook as the trigger event.
+2. Choose **Webhooks by Zapier**.
+3. Select **Catch Hook**.
 4. Copy the generated webhook URL.
-5. Open LeadFlow in your browser.
-6. Open Automation Settings.
-7. Select Zapier Webhook.
+5. Open ReliefRelay in your browser.
+6. Open **Automation Settings**.
+7. Select **Zapier webhook**.
 8. Paste the Catch Hook URL and save.
-9. Submit a test lead.
+9. Click **Load sample scenario** and submit it.
 
-Zapier should detect fields such as:
+Expected fields include:
 
-- name
-- email
-- company
-- service
-- budget
-- message
-- priority
-- score
+- requestId
+- fullName
+- contact
+- location
+- requestType
+- peopleAffected
+- urgency
+- safetyStatus
+- vulnerabilities
+- details
+- routeTier
+- routeDestination
+- routeReason
 - source
+- humanReviewRequired
 - submittedAt
 
-## 2. Normalize data
+## 2. Create a case log
 
-Add Formatter by Zapier if you want to clean or standardize fields.
+A simple portfolio implementation can use Google Sheets or Airtable.
 
-Useful examples:
+Suggested columns:
 
-- Capitalize a company name
-- Format submittedAt as a readable date
-- Convert the score to a number
-- Create a combined lead summary
+Request ID | Submitted At | Name | Contact | Area | Need | People | Urgency | Safety | Vulnerability Context | Route Tier | Destination | Route Reason | Details | Status | Assigned To
 
-## 3. Store the lead
+Set the initial status to **New — Human Review Required**.
 
-A simple portfolio-friendly action is Google Sheets.
+## 3. Route by destination
 
-Create columns for:
+Use **Paths by Zapier** or filters.
 
-Name | Email | Company | Service | Budget | Priority | Score | Message | Submitted At
+Example paths:
 
-Then add Google Sheets - Create Spreadsheet Row and map the webhook fields.
+- Emergency response / evacuation desk
+- Health and medical coordination
+- Water, sanitation, and relief distribution
+- Relief distribution
+- Shelter and displacement support
+- Protection and accessibility support
+- Infrastructure / utilities coordination
+- General response desk
 
-You can replace Google Sheets with Airtable, HubSpot, Notion, Salesforce, or another supported destination.
+Do not use the routing tier to automatically deny or close cases.
 
-## 4. Route high-priority leads
-
-Use Filter by Zapier or Paths.
-
-Example condition:
-
-priority exactly matches High
-
-When true, trigger a faster notification path.
+## 4. Notify responders
 
 Possible actions:
 
 - Slack channel message
-- Gmail notification
+- Gmail alert
 - Microsoft Teams message
-- CRM task
-- SMS through a supported provider
+- task creation in a project or case-management system
+
+Recommended alert content:
+
+- request ID
+- request type
+- area
+- people affected
+- urgency
+- safety status
+- route tier
+- route reason
+- human review required
+
+Avoid exposing unnecessary personal details in shared channels.
 
 ## 5. Send an acknowledgement
 
-Add Gmail or Email by Zapier.
+If the deployment has an approved communication process, send a confirmation that the request was received.
 
-Example subject:
+Example:
 
-Thanks for your project request, {{name}}
+"Your assistance request has been received and is awaiting review by a response team. This confirmation does not guarantee dispatch or a specific response time. If there is immediate danger, contact the appropriate local emergency service."
 
-Example body:
+## 6. Optional AI summarization
 
-We received your request for {{service}}. Your project has been added to our workflow and a team member can review the details.
+AI can help summarize long situation descriptions, but it should not make the final emergency decision.
 
-Do not include the internal priority score in the customer-facing acknowledgement unless the business specifically wants it exposed.
+Prompt example:
 
-## 6. Optional AI step
+"Summarize this assistance request for a human responder in four bullets: need, location context, safety/urgency, and key access constraints. Preserve uncertainty. Do not invent facts. Do not change the route tier."
 
-To demonstrate AI automation, add an AI action supported by your Zapier account.
+Keep the original request visible beside the AI summary.
 
-A useful task is to summarize the lead for the sales or development team.
+## 7. Test routing cases
 
-Prompt idea:
+Use at least these test scenarios:
 
-Summarize this project request in three bullets. Identify the requested service, likely technical needs, and the most important follow-up question. Do not invent information that is not in the submission.
+### Critical
+- requestType: rescue
+- urgency: immediate
+- safetyStatus: trapped
 
-Inputs:
+Expected: **Critical → Emergency response / evacuation desk**
 
-- service
-- company
-- message
-- budget
+### High
+- requestType: shelter
+- urgency: today
+- safetyStatus: unsafe
+- vulnerability: child
 
-The generated summary can then be inserted into Slack, email, a CRM note, or a spreadsheet column.
+Expected: **High → Shelter and displacement support**
 
-## 7. Test the complete workflow
+### Standard
+- requestType: infrastructure
+- urgency: routine
+- safetyStatus: safe
 
-Submit at least three different leads:
+Expected: **Standard → Infrastructure / utilities coordination**
 
-1. Low-budget general request
-2. Medium-budget web development request
-3. High-budget automation or AI workflow request
+## 8. Test offline queue behavior
 
-Confirm that:
+1. Enable Zapier mode.
+2. Disconnect your internet connection.
+3. Submit a fictional request.
+4. Confirm that **Waiting to sync** increases.
+5. Restore connectivity.
+6. Confirm that ReliefRelay attempts to send queued requests.
 
-- Zapier receives every payload
-- The destination contains the correct fields
-- High-priority routing behaves correctly
-- Emails or notifications contain the intended data
-- No webhook URL or account credential is committed to GitHub
+## Production security requirements
 
-## Portfolio evidence
+The browser-to-Zapier connection is appropriate for a portfolio demonstration, but a real deployment should:
 
-For a stronger portfolio, add screenshots after you configure the Zap:
+- submit through a secure backend
+- keep webhook URLs and credentials server-side
+- authenticate staff access
+- encrypt sensitive data
+- rate-limit public endpoints
+- use bot / abuse protection
+- implement audit logging
+- establish retention and deletion policies
+- define incident handling
+- comply with applicable privacy and humanitarian data-protection requirements
 
-- Zap overview
-- Webhook trigger test
-- Google Sheets row creation
-- High-priority filter or path
-- Final Slack/email notification
+## Portfolio evidence to capture
 
-Place screenshots in an assets directory and reference them from the main README.
+After configuring the Zap, add screenshots of:
 
-## Security
+- Catch Hook trigger
+- sample payload received
+- case row created
+- Paths / Filter logic
+- responder notification
+- optional AI summary
+- successful end-to-end test
 
-A Zapier Catch Hook URL can be abused if publicly exposed.
-
-Do not:
-
-- commit a production webhook URL
-- place credentials in app.js
-- commit API keys
-- expose private customer data in screenshots
-
-Use test data for portfolio demonstrations.
+Use fictional data in all screenshots.
